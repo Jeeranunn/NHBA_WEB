@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>NHBA</title>
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คลังระบบหอจดหมายเหตุดิจิทัล - Premium Tape Library & Archive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="login-screen">
+    <div class="login-box">
+        <span class="archive-badge">🏛️คลังรวบรวมบันทึกและเอกสาร NHBA </span>
+        <h2 style="margin: 0 0 6px 0; color: #1e293b;">เข้าสู่ระบบ</h2>
+        <p style="color: var(--text-muted); font-size: 0.9em; margin: 0 0 24px 0;">กรุณายืนยันตัวตนเพื่อสืบค้นข้อมูล</p>
+        <input type="email" id="login-email" placeholder="อีเมลผู้ใช้งาน">
+        <input type="password" id="login-pass" placeholder="รหัสผ่าน">
+        <button id="login-btn" onclick="handleLogin()">ยืนยันสิทธิ์เข้าใช้งาน</button>
+        <p id="login-error" style="color: var(--brand-red); font-size: 0.85em; margin-top: 14px; display: none; font-weight: 500;"></p>
+    </div>
+</div>
+
+<div id="hub-screen">
+    <h2 style="color: white; margin: 0; font-size: 1.8em;">เลือกโหมดการสืบค้น</h2>
+    <p style="color: #94a3b8; margin: -10px 0 10px 0;">ศูนย์กลางจัดเก็บข้อมูลพรีเมียม</p>
+    <div class="hub-container">
+        <div class="hub-card" onclick="switchSystemMode('TAPE')">
+            <div class="hub-icon">📺</div>
+            <h3 style="margin: 0 0 8px 0; color: var(--brand-red);">คลังบันทึกการบรรยาย</h3>
+            <p style="color: var(--text-muted); font-size: 0.88em; margin: 0;">ระบบสืบค้นวิดีโอการบรรยาย</p>
+        </div>
+        <div class="hub-card" onclick="switchSystemMode('DOC')">
+            <div class="hub-icon">📄</div>
+            <h3 style="margin: 0 0 8px 0; color: var(--brand-orange);">คลังเอกสารจัดเก็บ</h3>
+            <p style="color: var(--text-muted); font-size: 0.88em; margin: 0;">ระบบสืบค้นวารสารและเอกสารต่างๆ</p>
+        </div>
+        <div class="hub-card" onclick="switchSystemMode('BOOK')">
+            <div class="hub-icon">📚</div>
+            <h3 style="margin: 0 0 8px 0; color: #0369a1;">คลังหนังสือธรรมะ</h3>
+            <p style="color: var(--text-muted); font-size: 0.88em; margin: 0;">ระบบสืบค้นธรรมนิพนธ์ระดับหน้าและสารบัญ</p>
+        </div>
+    </div>
+</div>
+
+<div class="app-container" id="main-app">
+    
+    <div class="sidebar" id="sidebarDrawer">
+        <div class="sidebar-header">
+            <span id="txtSidebarHeader">📚 รายการสารบัญคลัง</span>
+            <button class="close-sidebar-btn" onclick="toggleSidebarDrawer(false)">✕</button>
+        </div>
+        <div class="stats-box">
+            <span>🔍 ค้นพบในเงื่อนไขกรอง:</span>
+            <span id="txtCounterLabel">0 / 0 รายการ</span>
+        </div>
+        <ul class="archive-list" id="mainDataUl"></ul>
+    </div>
+
+    <div class="main-content" id="mainContentArea">
+        
+        <div class="top-navbar">
+            <div class="nav-left">
+                <button class="btn-toggle" onclick="toggleSidebarDrawer(true)">☰ เปิดสารบัญคลัง</button>
+                <div id="txtNavTitle" style="font-weight: bold; font-size: 1.1em; color: var(--brand-red);">🏛️ ระบบสืบค้นจดหมายเหตุดิจิทัล</div>
+            </div>
+            <button class="btn-toggle" onclick="backToHub()" style="background:#0f172a; color:white;">🔄 สลับโหมดคลัง</button>
+        </div>
+        
+        <div class="search-panel" id="mainSearchPanel">
+            
+            <div id="filterGroupTape" style="display: none;">
+                <div class="search-grid">
+                    <div class="input-group">
+                        <label>ค้นหาหัวข้อ/คำที่เกี่ยวข้อง</label>
+                        <input type="text" id="tapeSearchTitle" oninput="runMasterFilter()" placeholder="พิมพ์หัวข้อการบรรยาย...">
+                    </div>
+                    <div class="input-group">
+                        <label>ประเภทกิจกรรม</label>
+                        <select id="tapeDropMeet" onchange="runMasterFilter()"><option value="">-- ทั้งหมด --</option></select>
+                    </div>
+                    <div class="input-group">
+                        <label>สถานที่บรรยาย</label>
+                        <select id="tapeDropLocation" onchange="runMasterFilter()"><option value="">-- ทั้งหมด --</option></select>
+                    </div>
+                </div>
+            </div>
+
+            <div id="filterGroupDoc" style="display: none;">
+                <div class="search-grid">
+                    <div class="input-group" style="grid-column: span 2;">
+                        <label>🔍 ค้นหาหัวข้อเอกสาร / เนื้อหา</label>
+                        <input type="text" id="docSearchMain" oninput="runMasterFilter()" placeholder="พิมพ์ชื่อเอกสารหรือแท็ก...">
+                    </div>
+                    <div class="input-group">
+                        <label>ประเภทเอกสาร</label>
+                        <select id="docDropType" onchange="runMasterFilter()"><option value="">-- ทั้งหมด --</option></select>
+                    </div>
+                </div>
+            </div>
+
+            <div id="filterGroupBook" style="display: none;">
+                <div class="search-grid">
+                    <div class="input-group" style="grid-column: span 2;">
+                        <label>🔍 ค้นหาหัวข้อในสารบัญ / คำสำคัญ</label>
+                        <input type="text" id="bookSearchMain" oninput="runMasterFilter()" placeholder="พิมพ์ชื่อบท เช่น ปฐมนิพนธ์ หรือคีย์เวิร์ด...">
+                    </div>
+                    <div class="input-group">
+                        <label>เลือกหนังสือ / เล่ม</label>
+                        <select id="bookDropName" onchange="runMasterFilter()"><option value="">-- หนังสือทั้งหมด --</option></select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="view-body">
+            
+            <div id="viewBookShelf" style="display: none; padding: 20px;">
+                <h3 style="margin-top: 0; color: #334155;">📚 คอลเลกชันหนังสือธรรมะ</h3>
+                <div class="book-shelf-grid" id="bookShelfContainer">
+                    </div>
+            </div>
+
+            <div id="viewDisplayCardTape" class="display-container" style="display: none;">
+                <div class="video-player-wrapper"><iframe id="tapePlayer" src="" allowfullscreen></iframe></div>
+                <span class="tape-badge" id="detailsBadge">ประเภท</span>
+                <h2 id="cardTapeTitle" style="margin: 0 0 4px 0;">-</h2>
+                <p id="detailsMeetGroup" style="margin: 0; color: var(--text-muted);">คลังหลักมีท: -</p>
+            </div>
+
+            <div id="viewDisplayCardDoc" class="display-container" style="display: none; padding: 40px; text-align: center;">
+                <div style="font-size: 4em; margin-bottom: 10px;">📄</div>
+                <h2 id="cardDocTitle" style="margin: 0 0 8px 0;">ชื่อไฟล์เอกสาร</h2>
+                <p id="cardDocTypeBadge" style="margin: 0; color: var(--brand-orange); font-weight: bold;">หมวดหมู่: -</p>
+                <div class="action-buttons-group" style="max-width: 400px; margin: 20px auto 0 auto;">
+                    <a id="btnDocOpenLink" href="#" target="_blank" class="btn-action btn-orange">👁️ ดูออนไลน์</a>
+                </div>
+            </div>
+
+            <div id="viewDisplayCardBook" class="display-container" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                    <div>
+                        <span class="tape-badge" style="background: #e0f2fe; color: #0369a1;" id="cardBookNameBadge">ชื่อหนังสือ</span>
+                        <h2 id="cardBookChapterTitle" style="margin: 4px 0 0 0; font-size: 1.5em; color: var(--text-main);">ชื่อบท</h2>
+                    </div>
+                    <div class="page-highlight">
+                        <span style="font-size: 0.8em; opacity: 0.8;">เนื้อหาอยู่ที่</span><br>
+                        หน้า <span id="cardBookPageNum" style="font-size: 1.4em;">-</span>
+                    </div>
+                </div>
+                
+                <div class="video-player-wrapper" style="padding-bottom: 120%; border-radius: 12px;">
+                    <iframe id="bookPdfPlayer" src="" allowfullscreen></iframe>
+                </div>
+                
+                <div class="action-buttons-group">
+                    <button class="btn-action" style="background: #f1f5f9; color: #334155;" onclick="copyPageNumber()">📋 คัดลอกเลขหน้า</button>
+                    <a id="btnBookFullscreen" href="#" target="_blank" class="btn-action btn-orange">🔗 เปิด PDF หน้าต่างใหม่</a>
+                </div>
+            </div>
+
+            <div id="placeholderText" style="text-align: center; padding: 120px 20px; color: var(--text-muted);">
+                <span style="font-size: 3.5em;">🏛️</span>
+                <h3 style="margin: 16px 0 6px 0; font-size: 1.25em;">ระบบคลังข้อมูลดิจิทัล</h3>
+                <p style="margin: 0; font-size: 0.9em;">กรุณาเลือกรายการจากสารบัญด้านซ้าย</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
+    <script  src="./script.js"></script>
+
+  </body>
+  
+</html>
