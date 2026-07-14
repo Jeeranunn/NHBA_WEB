@@ -1,0 +1,70 @@
+:root {
+    --brand-red: #991b1b;       
+    --brand-orange: #ea580c;    
+    --brand-accent: #f97316;    
+    --bg-main: #f8fafc;
+    --bg-card: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --sidebar-w: 380px;
+}
+
+* { box-sizing: border-box; font-family: 'Sarabun', sans-serif; }
+
+body { margin: 0; padding: 0; background-color: var(--bg-main); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; transition: all 0.3s ease; }
+
+#login-screen { position: fixed; inset: 0; background: linear-gradient(135deg, #7f1d1d, #c2410c); z-index: 99999; display: flex; justify-content: center; align-items: center; }
+.login-box { background: var(--bg-card); padding: 50px 40px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4); width: 100%; max-width: 440px; text-align: center; }
+.archive-badge { background: linear-gradient(to right, var(--brand-red), var(--brand-orange)); color: white; padding: 6px 14px; border-radius: 30px; font-weight: bold; font-size: 0.8em; display: inline-block; margin-bottom: 20px; }
+.login-box input { width: 100%; padding: 14px 18px; margin-bottom: 16px; border: 1.5px solid var(--border-color); border-radius: 12px; font-size: 0.95em; }
+.login-box button { width: 100%; padding: 16px; background: var(--brand-red); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+.login-box button:hover { background: #7f1d1d; }
+
+#hub-screen { position: fixed; inset: 0; background: #0f172a; z-index: 99998; display: none; justify-content: center; align-items: center; gap: 30px; flex-direction: column; }
+.hub-container { display: flex; gap: 20px; max-width: 1000px; width: 100%; padding: 20px; flex-wrap: wrap; justify-content: center;}
+.hub-card { flex: 1; min-width: 280px; max-width: 320px; background: white; border-radius: 24px; padding: 40px 20px; text-align: center; cursor: pointer; transition: 0.3s; border: 2px solid transparent; }
+.hub-card:hover { border-color: var(--brand-orange); transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(234, 88, 12, 0.15); }
+.hub-icon { font-size: 4em; margin-bottom: 15px; }
+
+.app-container { display: none; width: 100%; height: 100%; position: relative; }
+.sidebar { width: var(--sidebar-w); background: white; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; height: 100%; position: absolute; left: 0; top: 0; transition: transform 0.3s; z-index: 40; }
+.sidebar.collapsed { transform: translateX(calc(var(--sidebar-w) * -1)); }
+.sidebar-header { padding: 24px; background: linear-gradient(135deg, var(--brand-red), var(--brand-orange)); color: white; font-weight: bold; font-size: 1.15em; display: flex; justify-content: space-between; }
+.close-sidebar-btn { cursor: pointer; background: none; border: none; color: white; font-size: 1.2em; }
+.stats-box { padding: 14px 20px; background: #fff7ed; border-bottom: 1px solid #ffedd5; font-size: 0.85em; font-weight: bold; color: #c2410c; display: flex; justify-content: space-between; }
+.archive-list { flex: 1; overflow-y: auto; list-style: none; padding: 0; margin: 0; }
+.meet-group-title { background: #f1f5f9; padding: 12px 20px; font-weight: 700; color: #334155; font-size: 0.85em; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 10; }
+.tape-item { padding: 16px 20px; border-bottom: 1px solid #f8fafc; cursor: pointer; font-size: 0.9em; transition: 0.2s; color: #475569; display: flex; flex-direction: column; gap: 4px; }
+.tape-item:hover { background: #fff7ed; color: var(--brand-orange); }
+.tape-item.active { background: #fef2f2; border-left: 5px solid var(--brand-red); color: var(--brand-red); font-weight: bold; }
+
+.main-content { margin-left: var(--sidebar-w); height: 100%; overflow-y: auto; display: flex; flex-direction: column; transition: margin-left 0.3s; }
+.main-content.fullscreen { margin-left: 0; }
+.top-navbar { background: white; padding: 16px 30px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+.nav-left { display: flex; align-items: center; gap: 14px; }
+.btn-toggle { background: #f1f5f9; border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+.search-panel { background: white; border-bottom: 1px solid var(--border-color); padding: 24px 30px; }
+.search-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.input-group { display: flex; flex-direction: column; gap: 6px; }
+.input-group label { font-size: 0.78em; font-weight: 700; color: #475569; }
+.search-panel input, .search-panel select { padding: 11px 14px; border: 1px solid var(--border-color); border-radius: 10px; background: #fff; width: 100%; }
+
+.view-body { padding: 30px; max-width: 1150px; width: 100%; margin: 0 auto; flex: 1; }
+.display-container { background: white; border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }
+.video-player-wrapper { position: relative; padding-bottom: 56.25%; height: 0; background: #f1f5f9; border-radius: 20px; overflow: hidden; margin-bottom: 20px; }
+.video-player-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+.tape-badge { background: #e2e8f0; padding: 4px 10px; border-radius: 6px; font-size: 0.8em; font-weight: bold; display: inline-block; margin-bottom: 10px; }
+
+/* 🆕 สไตล์สำหรับคลังหนังสือ */
+.book-shelf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 24px; padding-top: 10px; }
+.book-cover-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; padding-bottom: 16px;}
+.book-cover-card:hover { transform: translateY(-8px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.15); border-color: #0ea5e9; }
+.book-cover-img { width: 100%; height: 220px; background: #cbd5e1; object-fit: cover; border-bottom: 4px solid #0369a1; }
+.book-cover-title { font-weight: bold; font-size: 0.95em; color: var(--text-main); margin-top: 12px; text-align: center; padding: 0 10px; }
+.page-highlight { background: #fffbeb; color: #b45309; padding: 10px 20px; border-radius: 12px; border: 1px dashed #fcd34d; text-align: center; font-weight: bold; line-height: 1.2; }
+.page-badge-small { background: #f1f5f9; color: #475569; padding: 2px 6px; border-radius: 4px; font-size: 0.75em; font-weight: bold; margin-left: auto; }
+
+.action-buttons-group { display: flex; gap: 12px; margin-top: 24px; }
+.btn-action { flex: 1; padding: 14px; border-radius: 10px; font-weight: bold; text-align: center; cursor: pointer; text-decoration: none; border: none; }
+.btn-orange { background: #ffedd5; color: #ea580c; } .btn-orange:hover { background: #fed7aa; }
